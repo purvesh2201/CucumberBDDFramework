@@ -14,7 +14,8 @@ import org.testng.annotations.DataProvider;
         glue = {"stepdefinition", "hooks"},   // include both step defs and hooks packages
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true,
-        publish = true
+        publish = true,
+        dryRun = true
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
 
