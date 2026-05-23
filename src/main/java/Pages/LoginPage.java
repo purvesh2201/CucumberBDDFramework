@@ -29,6 +29,7 @@ public class LoginPage {
     private WebElement orangeHRMLogo;
 
 
+
     public void enterUsernameandPassword(String username, String password) {
         wait.waitForVisibility(usernameField);
         usernameField.sendKeys(username);

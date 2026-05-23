@@ -15,7 +15,7 @@ import org.testng.annotations.DataProvider;
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true,
         publish = true,
-        dryRun = true
+        dryRun = false
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
 

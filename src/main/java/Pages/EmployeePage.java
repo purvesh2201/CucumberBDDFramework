@@ -40,8 +40,27 @@ public class EmployeePage {
     @FindBy(xpath = "//button[text()=' Save ']")
     private WebElement saveButton;
 
-    @FindBy(xpath = "//img[@class='employee-image']/../..//preceding-sibling::div//child::h6" )
+    @FindBy(xpath = "//img[@class='employee-image']" )
     private WebElement employeeImage;
+
+    @FindBy(xpath = "//a[text()='Employee List']")
+    private WebElement employeeListTab;
+
+    @FindBy(xpath = "//i[@class='oxd-icon bi-caret-down-fill']")
+    private WebElement employeeIcon;
+
+    @FindBy(xpath = "//label[text()='Employee Id']//parent::div//following-sibling::div//child::input")
+    private WebElement employeeId1;
+
+    //button[text()=' Search ']
+    @FindBy(xpath = "//button[text()=' Search ']")
+    private WebElement searchButton;
+
+    @FindBy(xpath = "//i[@class='oxd-icon bi-trash']")
+    private WebElement trashButton;
+
+    @FindBy(xpath = "//*[text()=' Yes, Delete ']")
+    private WebElement deleteButton;
 
     public void clickPIMTab() {
         wait.waitForClickable(pimTab);
@@ -76,5 +95,29 @@ public class EmployeePage {
         saveButton.click();
         wait.waitForVisibility(employeeImage);
     }
+
+    public Boolean employeeImageIsDisplayed() {
+        wait.waitForVisibility(employeeImage);
+        return employeeImage.isDisplayed();
+    }
+
+    public void searchEmpIdToBeDeleted(String empid){
+        wait.waitForVisibility(employeeListTab);
+        employeeListTab.click();
+        wait.waitForVisibility(employeeIcon);
+        employeeIcon.click();
+        wait.waitForVisibility(employeeId1);
+        employeeId1.sendKeys(empid);
+        searchButton.click();
+    }
+
+    public void clickDeleteButton() {
+        wait.waitForVisibility(trashButton);
+        trashButton.click();
+        wait.waitForVisibility(deleteButton);
+        deleteButton.click();
+    }
+
+
 
 }

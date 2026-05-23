@@ -12,12 +12,19 @@ public class Hooks {
     public void setUp() {
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
-        DriverFactory.setDriver(driver);  // store driver in DriverFactory
+        DriverFactory.initializeDriver();  // store driver in DriverFactory
     }
+
 
     @After
     public void tearDown() {
-        DriverFactory.getDriver().quit();
+        if (DriverFactory.getDriver() != null) {
+            try {
+                DriverFactory.getDriver().quit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

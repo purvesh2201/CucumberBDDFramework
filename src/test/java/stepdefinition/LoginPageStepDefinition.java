@@ -1,35 +1,40 @@
 package stepdefinition;
 
 import Pages.LoginPage;
-import io.cucumber.java.After;
+import factory.DriverFactory;
 import io.cucumber.java.Before;
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 
 public class LoginPageStepDefinition {
 
-    private WebDriver driver;
     private LoginPage loginPage;
 
     @Before
-    public void setup(){
-        driver = new ChromeDriver();
+    public void setup() {
+        DriverFactory.initializeDriver();
     }
 
     @After
-    public void teardown(){
-        driver.quit();
+    public void teardown() {
+        DriverFactory.quitDriver();
     }
 
+    /**
+     * Get thread-safe WebDriver instance
+     */
+    private WebDriver getDriver() {
+        return DriverFactory.getDriver();
+    }
 
     @Given("I am on the OrangeHRM login page")
     public void i_am_on_the_orange_hrm_login_page() {
-        driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
-        loginPage = new LoginPage(driver);
+        getDriver().get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+        loginPage = new LoginPage(getDriver());
     }
 
     @When("I enter valid {string} and {string}")
@@ -58,7 +63,6 @@ public class LoginPageStepDefinition {
         Boolean isErrorMessageDisplayed = loginPage.verifyErrorMessage(errorMessage);
         Assert.assertTrue(isErrorMessageDisplayed);
     }
-
 
 
 
