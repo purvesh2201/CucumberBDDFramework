@@ -15,6 +15,7 @@ public class DriverFactory {
     public static void initializeDriver() {
         if (driver.get() == null) {
             driver.set(new ChromeDriver());
+            driver.get().manage().window().maximize();
         }
     }
 

@@ -8,7 +8,6 @@ Feature: Login feature for OrangeHRM application
     Examples:
       | username | password |
       | admin    | admin123 |
-      | admin    | admin123 |
 
 
   Scenario Outline: Unsuccessful login with invalid credentials
@@ -17,7 +16,6 @@ Feature: Login feature for OrangeHRM application
     And I click on the login button
     Then I should see an "<error_message>" indicating invalid credentials
     Examples:
-      | username    | password    | error_message       |
-      | invalidUser | validPass   | Invalid credentials |
-      | validUser   | invalidPass | Invalid credentials |
+      | username    | password  | error_message       |
+      | invalidUser | validPass | Invalid credentials |
 

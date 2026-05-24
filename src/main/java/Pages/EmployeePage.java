@@ -1,6 +1,7 @@
 package Pages;
 
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,17 +38,27 @@ public class EmployeePage {
     @FindBy(xpath = "//label[text()='Employee Id']//parent::div//following-sibling::div//child::input")
     private WebElement employeeId;
 
-    @FindBy(xpath = "//button[text()=' Save ']")
+    @FindBy(xpath = "//button[text()=' Save ']//..//preceding-sibling::button[@type='submit']")
     private WebElement saveButton;
+
+
+    @FindBy(xpath = "//p[text()='Successfully Saved']")
+    private WebElement ToastButton ;
 
     @FindBy(xpath = "//img[@class='employee-image']" )
     private WebElement employeeImage;
 
+    @FindBy(xpath = "//h6[text()='Test1 Test3']")
+    private WebElement empNameVerify;
+
     @FindBy(xpath = "//a[text()='Employee List']")
     private WebElement employeeListTab;
 
-    @FindBy(xpath = "//i[@class='oxd-icon bi-caret-down-fill']")
-    private WebElement employeeIcon;
+    @FindBy(xpath = "//button[.//i[contains(@class,'bi-caret-up-fill')]]")
+    private WebElement caretUpButton;
+
+    @FindBy(xpath = "//button[.//i[contains(@class,'bi-caret-down-fill')]]")
+    private WebElement caretDownButton;
 
     @FindBy(xpath = "//label[text()='Employee Id']//parent::div//following-sibling::div//child::input")
     private WebElement employeeId1;
@@ -62,8 +73,11 @@ public class EmployeePage {
     @FindBy(xpath = "//*[text()=' Yes, Delete ']")
     private WebElement deleteButton;
 
+    @FindBy(xpath = "//p[text()='Successfully Deleted']")
+    private WebElement ToastDeleteButton ;
+
     public void clickPIMTab() {
-        wait.waitForClickable(pimTab);
+        wait.waitForVisibility(pimTab);
         pimTab.click();
     }
 
@@ -91,24 +105,43 @@ public class EmployeePage {
         employeeId.sendKeys(id);
     }
 
-    public void clickSaveButton() {
+    public void clickSaveButton() throws InterruptedException {
+        wait.waitForVisibility(saveButton);
         saveButton.click();
-        wait.waitForVisibility(employeeImage);
+        wait.waitForVisibility(ToastButton);
+        wait.waitForVisibility(empNameVerify);
     }
 
     public Boolean employeeImageIsDisplayed() {
+        String mainWindow = driver.getWindowHandle();
+        for (String handle : driver.getWindowHandles()) {
+            if (!handle.equals(mainWindow)) {
+                driver.switchTo().window(handle);
+                driver.close(); // close the unwanted site
+            }
+        }
+        driver.switchTo().window(mainWindow);
         wait.waitForVisibility(employeeImage);
         return employeeImage.isDisplayed();
     }
 
     public void searchEmpIdToBeDeleted(String empid){
-        wait.waitForVisibility(employeeListTab);
-        employeeListTab.click();
-        wait.waitForVisibility(employeeIcon);
-        employeeIcon.click();
-        wait.waitForVisibility(employeeId1);
-        employeeId1.sendKeys(empid);
-        searchButton.click();
+        wait.waitForVisibility(pimTab);
+        pimTab.click();
+
+        try {
+            wait.waitForVisibility(caretUpButton);
+            employeeId1.sendKeys(empid);
+            searchButton.click();
+        } catch (Exception e) {
+            wait.waitForVisibility(caretDownButton);
+            caretDownButton.click();
+            wait.waitForVisibility(employeeId1);
+            employeeId1.sendKeys(empid);
+            employeeId1.sendKeys(Keys.CONTROL + "a");
+            searchButton.click();
+        }
+
     }
 
     public void clickDeleteButton() {
@@ -118,6 +151,10 @@ public class EmployeePage {
         deleteButton.click();
     }
 
+    public boolean validateEmployeeDeletedSuccesfully() {
+            wait.waitForVisibility(ToastDeleteButton);
+            return ToastDeleteButton.isDisplayed();
+        }
 
 
 }
